@@ -32,14 +32,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include <string>
 #include <iostream>
 
+#ifdef __APPLE__
+#    include <limits.h>
+#    include <mach-o/dyld.h>
+#endif
+
 extern "C" char **environ;
 
 std::filesystem::path GetProgramLocation()
 {
+#ifdef __APPLE__
+    // macOS has no /proc, so ask dyld for the executable path.
+    // It may go through symbolic links, resolve it to find the real directory
+    char     path[PATH_MAX];
+    char     resolvedPath[PATH_MAX];
+    uint32_t size = sizeof(path);
+
+    if (_NSGetExecutablePath(path, &size) != 0 || !realpath(path, resolvedPath)) {
+        return std::filesystem::path();
+    }
+
+    return std::filesystem::path(resolvedPath).parent_path();
+#else
     char    path[FILENAME_MAX];
     ssize_t count = readlink("/proc/self/exe", path, FILENAME_MAX);
 
     return std::filesystem::path(std::string(path, (count > 0) ? count : 0)).parent_path();
+#endif
 }
 
 void LaunchProgram(const std::filesystem::path& path, const std::vector<std::string>& argumentList)

@@ -71,20 +71,38 @@ Alternatively, you can also use [WINE](https://www.winehq.org/) to install the g
 
 |OS       |Kind of hardware (CPU, platform...)        |Archive
 |---------|-------------------------------------------|-----------------------
-|macOS    |Apple Silicon or Intel                     |`*-macos-multiarch.arm64-x86_64.zip`
+|macOS    |Apple Silicon or Intel                     |`*-macos-multiarch-arm64-x86_64.zip`
 |Linux    |AMD/Intel                                  |`*-linux-amd64` **(most Linux PCs - choose this if unsure)**
 |Linux    |Raspberry Pi 4 or 5                        |`*-linux-arm64`
+
+#### Allowing OpenMoHAA to run (macOS only)
+
+The macOS builds are not signed or notarized by Apple yet, so macOS blocks them by default with a message saying that Apple could not verify the file is free of malware.
+
+To prevent this, remove the quarantine flag from the downloaded archive **before extracting it**, by running this command in the Terminal:
+
+```sh
+xattr -d com.apple.quarantine ~/Downloads/openmohaa-*-macos-multiarch-arm64-x86_64.zip
+```
+
+Files extracted from the archive will then open normally.
+
+If you already extracted the archive, either:
+- Run `xattr -dr com.apple.quarantine /path/to/mohaa` on the game folder where the archive was extracted.
+- Or, for each blocked file, go to **System Settings → Privacy & Security** and click **Open Anyway**. Since macOS 15 (Sequoia), right-clicking the file and choosing **Open** no longer bypasses this check.
 
 #### Installing OpenMoHAA
 
 - Extract the archive<sup>1</sup> into the game folder where MOHAA is installed (the folder that contains the `main` subfolder and the original game files).
   - If MOHAA is installed in `/usr/games/mohaa`, then extract all files inside `/usr/games/mohaa`.
-- Create a shortcut to each of the **launch_openmohaa_\*** executable:
+- Create a shortcut to each of the **launch_openmohaa_\*** executable (on macOS, right-click the file and choose **Make Alias**):
   - `launch_openmohaa_base` (Base game)
   - `launch_openmohaa_spearhead` (Spearhead)
   - `launch_openmohaa_breakthrough` (Breakthrough)
 
 🟢 You're now ready to play! To start the game, execute one of the `launch_openmohaa_x` binaries.
+
+On macOS, opening a launcher from Finder also opens a Terminal window showing the game's console output. This is expected; closing that window quits the game.
 
 ----
 
