@@ -92,6 +92,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix the issue where the network would no longer work after hosting a multiplayer game on Allied Assault using the client.
 - Fix wrong alignment for UI elements using `centery` (#848).
 
+#### Platform
+
+- Fix the `launch_openmohaa_*` launchers not finding the game on macOS when opened from Finder.
+- Fix the macOS app bundle having an empty version.
+
 ### Changed
 
 #### Server
